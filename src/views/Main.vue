@@ -75,6 +75,7 @@
     import themeSwitch from './main-components/theme-switch/theme-switch.vue';
     import Cookies from 'js-cookie';
     import util from '@/libs/util.js';
+    import ajax from '@/libs/ajax';
     
     export default {
         components: {
@@ -196,6 +197,9 @@
         created () {
             // 显示打开的页面的列表
             this.$store.commit('setOpenedList');
+            ajax.get("/manager/user/user/show/" + 24).then(res=>{
+                        console.log(res);
+                    })
         }
     };
 </script>
