@@ -39,13 +39,12 @@
 
 <script>
 import Cookies from 'js-cookie';
-import ajax from '@/libs/ajax'
-import qs from 'qs'
+import qs from 'qs';
 export default {
     data () {
         return {
             form: {
-                username: 'iview_admin',
+                username: '',
                 password: ''
             },
             rules: {
@@ -62,27 +61,26 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    Cookies.set('user', this.form.username);
-                    Cookies.set('password', this.form.password);
-                    this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                    
-                    ajax.post("/manager/stateless/login",qs.stringify(this.form)).then(res=>{
-                        if(res.data.result == true){
-                            Cookies.set('token', res.data.data.token);
+                    // Cookies.set('user', this.form.username);
+                    // Cookies.set('password', this.form.password);
+                    // this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
+
+                    this.$store.dispatch('Login', qs.stringify(this.form)).then(response => {
+                        if (response.data.result) {
+                            Cookies.set('user', this.form.username);
+                            Cookies.set('token', response.data.data.token);
+                            this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
+                            this.$router.push('/home');
                         }
-                        this.$router.push({
-                            name: 'home_index'
-                        });
-                    })
-                    
-                    
+                    }).catch(e => {
+                        console.log(e);
+                    });
 
                     // if (this.form.username === 'iview_admin') {
                     //     Cookies.set('access', 0);
                     // } else {
                     //     Cookies.set('access', 1);
                     // }
-                   
                 }
             });
         }

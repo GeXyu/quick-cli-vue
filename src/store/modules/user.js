@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import {login, saveUser} from '@/api/user';
 
 const user = {
     state: {},
@@ -20,7 +21,28 @@ const user = {
                 localStorage.theme = theme;
             }
         }
+    },
+    actions: {
+        Login ({commit}, params) {
+            return new Promise((resolve, reject) => {
+                login(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        SaveUser ({commit}, parmas) {
+            return new Promise((resolve, reject) => {
+                saveUser(parmas).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        }
     }
 };
+// ----  api
 
 export default user;

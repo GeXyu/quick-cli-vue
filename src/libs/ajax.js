@@ -9,33 +9,32 @@ const ajaxUrl = env === 'development'
 
 let ajax = axios.create({
     baseURL: ajaxUrl,
-    timeout: 30000,
+    timeout: 30000
 });
 ajax.interceptors.request.use(function (config) {
-    let token = Cookies.get('token')
-    if(token){
+    let token = Cookies.get('token');
+    if (token) {
         config.headers.common['x-Authenticate-token'] = token;
     }
     return config;
-  }, function (error) {
-    
+}, function (error) {
     return Promise.reject(error);
-  });
+});
 ajax.interceptors.response.use(function (response) {
     // 对响应数据做点什么
-    console.log("-----"+response);
-    if(response==='403'){
+    console.log('-----' + response);
+    if (response === '403') {
         Cookies.remove('token');
     }
-    if(response.headers['x-Authenticate-token']){
-        if(Cookies.get('token')!= response.headers['x-Authenticate-token']){
-            Cookies.set('token',response.headers['x-Authenticate-token'])
+    if (response.headers['x-Authenticate-token']) {
+        if (Cookies.get('token') != response.headers['x-Authenticate-token']) {
+            Cookies.set('token', response.headers['x-Authenticate-token']);
         }
         console.log(response.headers['x-Authenticate-token']);
     }
     return response;
-  }, function (error) {
+}, function (error) {
     // 对响应错误做点什么
     return Promise.reject(error);
-  });
+});
 export default ajax;

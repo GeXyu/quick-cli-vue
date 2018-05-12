@@ -48,33 +48,32 @@
         </Card>
 </template>
 <script>
-import ajax from '@/libs/ajax'
-export default {
-  data(){
-      return {
-          fromControl:{
-              username:'',
-              password:'',
-              enable:'',
-              description:'',
-              ipone:''
-          },
-          enableList:[{key:'1',value:'是'},{key:'0',value:'否'}]
-      }
-  },
-  methods:{
-    submitHandle(){
-        ajax.post("/authentication/user/save",this.fromControl).then(res=>{
-            
-        }).catch(res=>{
 
-        })
-        console.log(this.fromControl);
+export default {
+    data () {
+        return {
+            fromControl: {
+                username: '',
+                password: '',
+                enable: '',
+                description: '',
+                ipone: ''
+            },
+            enableList: [{key: '1', value: '是'}, {key: '0', value: '否'}]
+        };
+    },
+    methods: {
+        submitHandle () {
+            this.$store.dispatch('SaveUser', this.fromControl).then(res => {
+                console.log(res);
+            }).catch(e => {
+                console.log(e);
+            });
+        }
+    },
+    created () {
+
     }
-  },
-  created(){
-   
-  }
-}
+};
 </script>
 
